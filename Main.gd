@@ -20,6 +20,9 @@ func _ready() -> void:
 		# be called sometime later to let us know if it's supported or not.
 		webxr_interface.is_session_supported("immersive-vr")
  
+	$ARVROrigin/LeftController.connect("button_pressed", self, "_on_LeftController_button_pressed")
+	$ARVROrigin/LeftController.connect("button_release", self, "_on_LeftController_button_release")
+ 
 func _webxr_session_supported(session_mode: String, supported: bool) -> void:
 	if session_mode == 'immersive-vr':
 		vr_supported = supported
@@ -67,3 +70,22 @@ func _webxr_session_ended() -> void:
  
 func _webxr_session_failed(message: String) -> void:
 	OS.alert("Failed to initialize: " + message)
+
+func _on_LeftController_button_pressed(button: int) -> void:
+	print ("Button pressed: " + str(button))
+ 
+func _on_LeftController_button_release(button: int) -> void:
+	print ("Button release: " + str(button))
+
+func _process(delta: float) -> void:
+	var left_controller_id = 100
+	var thumbstick_x_axis_id = 2
+	var thumbstick_y_axis_id = 3
+ 
+	var thumbstick_vector := Vector2(
+		Input.get_joy_axis(left_controller_id, thumbstick_x_axis_id),
+		Input.get_joy_axis(left_controller_id, thumbstick_y_axis_id))
+ 
+	if thumbstick_vector != Vector2.ZERO:
+		print ("Left thumbstick position: " + str(thumbstick_vector))
+		
